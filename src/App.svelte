@@ -1,109 +1,53 @@
 <script lang="ts">
-  import { buildThemeVars } from "./extra";
-
+  import { buildTheme, buildThemeVars } from "./extra";
   import Pelette from "./Pelette.svelte";
-
+  let mode = "hsb";
   let levels = 5;
   let gap = 18;
-
-  let names = [
-    "primary",
-    "secondary",
-    "tertiary",
-    "quaternary",
-    "quinary",
-    "senery",
-    "septenary",
-    "octonary",
-  ];
-
-  function buildTheme(levels, names, gap) {
-    let lightness = [];
-    let lStart = 50 - Math.ceil(((levels - 1) / 2) * gap);
-    for (let l = 1; l <= levels; l++) {
-      lightness.push((lStart + (l - 1) * gap) % 101);
-    }
-    let darkTheme = {};
-
-    let g = 100; //Math.ceil(360 / names.length);
-    let i = 0;
-    let baseHue = Math.floor(Math.random() * 1000) % 360;
-    for (let n of names) {
-      darkTheme[n] = {
-        h: (baseHue + g * i++) % 360,
-        s: 100,
-        l: [...lightness],
-      };
-    }
-
-    darkTheme = {...darkTheme,
-      success: { h: 120, s: 100, l: [...lightness] },
-      info: { h: 230, s: 100, l: [...lightness] },
-      warning: { h: 60, s: 100, l: [...lightness] },
-      danger: { h: 0, s: 100, l: [...lightness] },
-    }
-
-    let lightTheme = JSON.parse(JSON.stringify(darkTheme));
-    for (let t of Object.keys(lightTheme)) {
-      for (let l = 0; l < lightTheme[t].l.length; l++) {
-        lightTheme[t].l[l] = 100 - lightTheme[t].l[l];
-      }
-    }
-
-    let thm = { light: lightTheme, dark: darkTheme };
-
-    console.log(thm);
-
-    return thm;
-  }
-
+  let shift = 0;
+  let baseHue = Math.floor(Math.random() * 1000) % 360;
+  let sat = (((Math.random() * 1000) % 50) + 50).toFixed(0);
+  let names = ["one", "two", "three", "four", "five", "six", "seven", "eight"];
   let theme;
-  $: theme = buildTheme(levels, names, gap);
+  $: theme = buildTheme(levels, names, gap, shift, baseHue, sat);
 </script>
 
 <div class="p-4">
   <h2 class="t-center">Theme Builder</h2>
-
   <div class="t-center">
     Level Count:<input bind:value={levels} type="number" min="1" step="1" />
-    Lightness Gap: <input bind:value={gap} type="number" />
+    Value Gap: <input bind:value={gap} type="number" />
+    Value Shift: <input bind:value={shift} type="number" />
+    <hr />
+    Base Hue: {baseHue}
+    <input bind:value={baseHue} type="range" min="0" max="359" />
+    Base Saturation: {sat}
+    <input bind:value={sat} type="range" min="0" max="100" />
+    Mode:
+    <label>
+      <input type="radio" bind:group={mode} value="hsl" /> HSL
+    </label>
+    <label>
+      <input type="radio" bind:group={mode} value="hsb" /> HSB
+    </label>
   </div>
-
-  <div class="flex">
+  <div class="">
     <div class="">
       <h4 class="t-center">Light</h4>
-      <Pelette bind:theme={theme.light} />
-
-      <textarea class="box">{buildThemeVars(theme.light)}</textarea>
+      <Pelette bind:theme={theme.light} {mode} />
     </div>
     <div class="">
       <h4 class="t-center">Dark</h4>
-      <Pelette bind:theme={theme.dark} />
-
-      <textarea class="box">{buildThemeVars(theme.dark)}</textarea>
+      <Pelette bind:theme={theme.dark} {mode} />
     </div>
   </div>
 </div>
 
 <style>
-  textarea {
-    width: 100%;
-    height: 28rem;
-  }
   .t-center {
     text-align: center;
   }
   .p-4 {
-    padding: 1rem;
-  }
-
-  .flex {
-    display: flex;
-    justify-content: space-evenly;
-  }
-  .box {
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
+    padding: 0 0.4rem;
   }
 </style>
