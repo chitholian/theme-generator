@@ -31,7 +31,7 @@
         bind:value={theme[k].s}
         style="width:calc(50% - 4rem);"
       />
-      <ol style="padding-left: .5rem;">
+      <ol style="padding-left: 1rem;">
         {#each theme[k].l as l, i (i)}
           <li
             style={`padding:.125rem .25rem;background: ${getBgColor(
@@ -56,24 +56,3 @@
   {/each}
   <textarea class="box">{buildThemeVars(theme, mode)}</textarea>
 </div>
-
-<style>
-  * {
-    margin: 0.25rem;
-  }
-  .flex {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-  .box {
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-    flex-basis: 30%;
-    flex-grow: 1;
-  }
-  .t-center {
-    text-align: center;
-  }
-</style>

@@ -1,7 +1,8 @@
 <script lang="ts">
   import { buildTheme, buildThemeVars } from "./extra";
   import Pelette from "./Pelette.svelte";
-  let mode = "hsb";
+  let dark = true;
+  let mode = "hsl";
   let levels = 5;
   let gap = 18;
   let shift = 0;
@@ -30,24 +31,19 @@
     <label>
       <input type="radio" bind:group={mode} value="hsb" /> HSB
     </label>
+    <label style="font-size: 1rem;">
+      <input type="checkbox" bind:checked={dark} /> Show dark theme
+    </label>
   </div>
-  <div class="">
-    <div class="">
-      <h4 class="t-center">Light</h4>
-      <Pelette bind:theme={theme.light} {mode} />
-    </div>
-    <div class="">
+  <hr />
+  {#if dark}
+    <div class="bg-dark">
       <h4 class="t-center">Dark</h4>
       <Pelette bind:theme={theme.dark} {mode} />
     </div>
+  {/if}
+  <div class="bg-light">
+    <h4 class="t-center">Light</h4>
+    <Pelette bind:theme={theme.light} {mode} />
   </div>
 </div>
-
-<style>
-  .t-center {
-    text-align: center;
-  }
-  .p-4 {
-    padding: 0 0.4rem;
-  }
-</style>
