@@ -21,6 +21,8 @@ yarn build
 yarn dev
 ```
 
+### [Open Demo Page](http://chitholian.github.io/theme-generator/)
+
 ## Screenshots
 
 ![Screenshot 1](./img/screenshot-1.png)
