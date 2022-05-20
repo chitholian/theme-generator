@@ -11,7 +11,7 @@ export function buildThemeVars(theme, mode = 'hsb') {
 export function hsv2hsl(h, s, v, l = v - v * s / 2, m = Math.min(l, 1 - l)) {
     return [h, m ? (v - l) / m : 0, l]
 }
-export function buildTheme(levels, names, gap, shift = 0, baseHue, sat) {
+export function buildTheme(levels, names, gap, shift, baseHue, sat, g) {
     let value = [];
     let lStart = 50 - Math.ceil(((levels - 1) / 2) * gap) - shift;
 
@@ -20,11 +20,10 @@ export function buildTheme(levels, names, gap, shift = 0, baseHue, sat) {
         value.push(v);
     }
     let darkTheme = {};
-    let g = 100; //Math.ceil(360 / names.length);
     let i = 0;
     for (let n of names) {
         darkTheme[n] = {
-            h: (baseHue + g * i++) % 360,
+            h: Math.abs(baseHue + g * i++) % 360,
             s: sat,
             l: [...value],
         };
