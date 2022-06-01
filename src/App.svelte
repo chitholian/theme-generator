@@ -1,16 +1,17 @@
 <script lang="ts">
-    import {buildTheme} from "./extra";
+    import {buildTheme, hueGradient} from "./extra";
     import Palette from "./Palette.svelte";
 
     let dark = localStorage.getItem("dark") === "yes";
     let levels = 5;
-    let gap = 20;
+    let gap = 18;
     let shift = 0;
-    let baseA = -128 + Math.floor(Math.random() * 1000) % 256;
-    let baseB = -128 + Math.floor(Math.random() * 1000) % 256;
+    let baseHue = Math.round(Math.random() * 1000) % 360;
+    let hueJump = 45 //50 + Math.round(Math.random() * 1000) % 100;
+    let saturation = 50 + Math.round(Math.random() * 1000) % 25;
     let names = ["one", "two", "three", "four", "five", "six", "seven", "eight"];
     let theme;
-    $: theme = buildTheme(levels, names, gap, shift, baseA, baseB);
+    $: theme = buildTheme(levels, names, gap, shift, baseHue, saturation, hueJump);
 
     $: saveOptions(dark);
 
@@ -25,14 +26,15 @@
         Level Count:<input bind:value={levels} type="number" min="1" step="1"/>
         Value Gap: <input bind:value={gap} type="number"/>
         Value Shift: <input bind:value={shift} type="number"/>
+        Hue Jump: <input bind:value={hueJump} type="number"/>
         <hr/>
-        Base A: {baseA}
-        <span style="background: linear-gradient(90deg, green, red)">
-            <input bind:value={baseA} type="range" min="-128" max="127"/>
+        Base Hue: {baseHue}
+        <span style="background: {hueGradient}">
+            <input bind:value={baseHue} type="range" min="0" max="359"/>
         </span>
-        Base B: {baseB}
-        <span style="background: linear-gradient(90deg, blue, yellow)">
-            <input bind:value={baseB} type="range" min="-128" max="127"/>
+        Base Saturation: {saturation}
+        <span style="background: linear-gradient(90deg, hsl({baseHue}, 0%, 50%), hsl({baseHue}, 100%, 50%))">
+            <input bind:value={saturation} type="range" min="0" max="100"/>
         </span>
         <label style="font-size: 1rem;">
             <input type="checkbox" bind:checked={dark}/> Show dark theme

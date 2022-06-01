@@ -24,6 +24,10 @@ body {
     flex-grow: 1;
 }
 
+textarea.box {
+    min-height: 15rem;
+}
+
 .t-center {
     text-align: center;
 }
