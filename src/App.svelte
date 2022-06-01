@@ -1,17 +1,16 @@
 <script lang="ts">
-    import {buildTheme, fixInt} from "./extra";
+    import {buildTheme} from "./extra";
     import Palette from "./Palette.svelte";
 
     let dark = localStorage.getItem("dark") === "yes";
     let levels = 5;
-    let gap = 18;
+    let gap = 20;
     let shift = 0;
-    let hueJump = 50; // fixInt(((Math.random() * 1000) % 10) + 47);
-    let baseHue = Math.floor(Math.random() * 1000) % 360;
-    let sat = fixInt(((Math.random() * 1000) % 50) + 20);
+    let baseA = -128 + Math.floor(Math.random() * 1000) % 256;
+    let baseB = -128 + Math.floor(Math.random() * 1000) % 256;
     let names = ["one", "two", "three", "four", "five", "six", "seven", "eight"];
     let theme;
-    $: theme = buildTheme(levels, names, gap, shift, baseHue, sat, hueJump);
+    $: theme = buildTheme(levels, names, gap, shift, baseA, baseB);
 
     $: saveOptions(dark);
 
@@ -24,14 +23,17 @@
     <h2 class="t-center">Theme Builder</h2>
     <div class="t-center">
         Level Count:<input bind:value={levels} type="number" min="1" step="1"/>
-        Hue Jump: <input bind:value={hueJump} type="number"/>
         Value Gap: <input bind:value={gap} type="number"/>
         Value Shift: <input bind:value={shift} type="number"/>
         <hr/>
-        Base Hue: {baseHue}
-        <input bind:value={baseHue} type="range" min="0" max="359"/>
-        Base Chroma: {sat}
-        <input bind:value={sat} type="range" min="0" max="100"/>
+        Base A: {baseA}
+        <span style="background: linear-gradient(90deg, green, red)">
+            <input bind:value={baseA} type="range" min="-128" max="127"/>
+        </span>
+        Base B: {baseB}
+        <span style="background: linear-gradient(90deg, blue, yellow)">
+            <input bind:value={baseB} type="range" min="-128" max="127"/>
+        </span>
         <label style="font-size: 1rem;">
             <input type="checkbox" bind:checked={dark}/> Show dark theme
         </label>
